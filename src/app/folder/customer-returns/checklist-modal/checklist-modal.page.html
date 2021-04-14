@@ -5,7 +5,7 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
-    <form #form="ngForm" (ngSubmit)="SaveCheckList(recordid,seq_no)">
+    <form #form="ngForm" (ngSubmit)="SaveCheckList()">
         <ion-grid>
             <ion-row>
                 <ion-col size="6"></ion-col>
@@ -26,13 +26,13 @@
             <ion-row>
                 <ion-col size="6">Does the actual condition of the part match the customer's description?</ion-col>
                 <ion-col size="2">
-                    <ion-checkbox  value="Yes" (ionChange)="addUpdate($event)"  name="actual_condition_yes" [checked]="isActualConditionYes" ng-checked="isActualConditionYes" ></ion-checkbox>
+                    <ion-checkbox  value="Yes" (ionChange)="addUpdate($event)"  name="actual_condition_yes" [checked]="isActualConditionYes" ></ion-checkbox>
                 </ion-col>
                 <ion-col size="1">
-                    <ion-checkbox  value="No" (ionChange)="addUpdate($event)"  name="actual_condition_no" [checked]="isActualConditionNo" ng-checked="isActualConditionNo" ></ion-checkbox>
+                    <ion-checkbox  value="No" (ionChange)="addUpdate($event)"  name="actual_condition_no" [checked]="isActualConditionNo" ></ion-checkbox>
                 </ion-col>
                 <ion-col size="3">
-                    <ion-select name="inspected_condition" (ionChange)="addUpdate($event)" *ngIf="isActualConditionNo">
+                    <ion-select name="inspected_condition" (ionChange)="addUpdate($event)" *ngIf="isActualConditionNo" [selected]="inspectedCondition" value="{{inspectedCondition}}">
                         <ion-select-option value="Chipped" selected>Chipped</ion-select-option>
                         <ion-select-option value="Rusted">Rusted</ion-select-option>
                         <ion-select-option value="Scratched">Scratched</ion-select-option>

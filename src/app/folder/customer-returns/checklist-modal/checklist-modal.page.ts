@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import {ApiRequestService} from '../api-request.service';
-import {NavController, ToastController, AlertController, ModalController} from '@ionic/angular';
+import {NavController, ToastController, AlertController, ModalController,NavParams} from '@ionic/angular';
 
 @Component({
     selector: 'app-checklist-modal',
@@ -14,14 +14,49 @@ export class ChecklistModalPage implements OnInit {
     isActualConditionNo: boolean=false;
     isActualConditionYes: boolean=false;
     inspectedCondition: any;
+    userdata: Object;
+    recordid :any;
+    seq_no : any;
+    ass_detail : any;
+    is_update : any;
     constructor(
         public apiRequestService: ApiRequestService,
-        public modalCtrl: ModalController
+        public modalCtrl: ModalController,
+        private navParams: NavParams,
     ) {
     }
 
     ngOnInit() {
+        this.apiRequestService.isLogged().then(result => {
+            if (!(result == false)) {
+                console.log('loading storage data (within param route function)', result);
+                this.userdata = result;
+                this.loadData();
+            } else {
+                console.log('nothing in storage, going back to login');
+                this.apiRequestService.logout();
+            }
+        });
+    }
+    loadData() {
+        this.recordid = this.navParams.data.recordid;
+        this.seq_no = this.navParams.data.seq_no;
+        this.ass_detail = this.navParams.data.ass_detail;
+        this.is_update = this.navParams.data.is_update;
+        if(Object.keys(this.ass_detail).length > 0){
+            if(this.ass_detail.cf_correct_part == 1){
+                this.isCorrectPartYes = true;
+            }else if(this.ass_detail.cf_correct_part == 0){
+                this.isCorrectPartNo = true;
+            }
 
+            if(this.ass_detail.cf_condition_part_match == 1){
+                this.isActualConditionYes = true;
+            }else if(this.ass_detail.cf_condition_part_match == 0){
+                this.isActualConditionNo = true;
+                this.inspectedCondition = this.ass_detail.cf_condition;
+            }
+        }
     }
 
     addUpdate(event) {
@@ -74,18 +109,17 @@ export class ChecklistModalPage implements OnInit {
         console.log('xxx isCorrectPartNo'+ this.isCorrectPartNo);
     }
 
-    SaveCheckList(recordid,seq_no){
+    SaveCheckList(){
         console.log('Save checklist');
-        console.log(recordid);
-        console.log(seq_no);
         var params = {
-            recordid: recordid,
-            seq_no: seq_no,
+            recordid: this.recordid,
+            seq_no: this.seq_no,
             isCorrectPartNo: this.isCorrectPartNo,
             isCorrectPartYes: this.isCorrectPartYes,
             inspectedCondition: this.inspectedCondition,
             isActualConditionYes: this.isActualConditionYes,
             isActualConditionNo: this.isActualConditionNo,
+            is_update: this.is_update,
         }
         this.apiRequestService.post(this.apiRequestService.ENDPOINT_SAVE_CHECKLIST, params).subscribe(response => {
             console.log(response);

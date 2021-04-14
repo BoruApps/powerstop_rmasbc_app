@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { CoreReturnsPage } from './core-returns.page';
+import { CreateRmaPage } from './create-rma.page.ts';
 
-describe('CoreReturnsPage', () => {
-  let component: CoreReturnsPage;
-  let fixture: ComponentFixture<CoreReturnsPage>;
+describe('CreateRmaPage', () => {
+  let component: CreateRmaPage;
+  let fixture: ComponentFixture<CreateRmaPage>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ CoreReturnsPage ],
+      declarations: [ CreateRmaPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CoreReturnsPage);
+    fixture = TestBed.createComponent(CreateRmaPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

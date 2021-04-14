@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { CoreReturnsPage } from './core-returns.page';
+import { CreateRmaPage } from './create-rma.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: CoreReturnsPage
+    component: CreateRmaPage
   }
 ];
 
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class CoreReturnsPageRoutingModule {}
+export class CreateRmaPageRoutingModule {}

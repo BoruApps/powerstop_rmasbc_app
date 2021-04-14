@@ -17,7 +17,8 @@ export class CustomerReturnsPage implements OnInit {
       public modalCtrl: ModalController,
       public storage: Storage,
       private navCtrl: NavController,
-      private router: Router
+      private router: Router,
+      public alertController: AlertController
   ) { }
   
   public barcode: any = '';
@@ -30,8 +31,8 @@ export class CustomerReturnsPage implements OnInit {
       input: 'text',  
       inputPlaceholder: 'Enter Barcode #',
       inputLabel: "Barcode #"
-    })
-    this.addSwalEventListener()
+    });
+    this.addSwalEventListener();
     if (barcode) { 
       this.barcode = barcode;
       var params = {
@@ -48,10 +49,17 @@ export class CustomerReturnsPage implements OnInit {
               //scan line item, show checklist
             var recordid = data.record;
             var seq_no = data.seq_no;
-            this.openModal(recordid, seq_no);
+            this.openModal(recordid, seq_no,[],0);
           }
         }else{
-          Swal.fire(response.body.message);
+          if(response.body.message == 'Item already full scanned.'){
+            var data = response.body.data;
+            if(Object.keys(data.ass_detail).length > 0){
+              this.showConfirm(data);
+            }
+          }else {
+            Swal.fire(response.body.message);
+          }
         }
         this.apiRequestService.hideLoading();
       },  error => {
@@ -60,6 +68,30 @@ export class CustomerReturnsPage implements OnInit {
       });
     }
   }
+
+  async showConfirm(data){
+  const alert =  await this.alertController.create({
+    cssClass: 'confirm',
+    header: 'Confirm!',
+    message: "Item full scanned. Would you like you like to make updates to the Inspection Checklist? ",
+    buttons: [
+      {
+        text: 'No',
+        role: 'cancel',
+        cssClass: 'secondary',
+        handler: (blah) => {
+          console.log('Confirm Cancel: blah');
+        }
+      }, {
+        text: 'Yes',
+        handler: () => {
+          this.openModal(data.record, data.seq_no,data.ass_detail,1);
+        }
+      }
+    ]
+  });
+  return await alert.present();
+}
 
   addSwalEventListener(){ 
     console.log('doing')
@@ -70,13 +102,15 @@ export class CustomerReturnsPage implements OnInit {
     })
   }
 
-  async openModal(recordid, seq_no) {
+  async openModal(recordid, seq_no,data, is_update) {
   const modal = await this.modalCtrl.create({
     component: ChecklistModalPage,
     cssClass: 'checklist-modal',
     componentProps: {
       "recordid": recordid,
       "seq_no": seq_no,
+      "ass_detail": data,
+      "is_update": is_update,
     }
   });
 
@@ -101,6 +135,9 @@ export class CustomerReturnsPage implements OnInit {
   ngAfterContentInit(){ 
    //console.log(document.getElementById('showbarc'))
     
+  }
+  createRMA(){
+    this.navCtrl.navigateForward('/folder/Home/create-rma');
   }
 
 }

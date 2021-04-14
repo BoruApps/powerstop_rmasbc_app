@@ -78,7 +78,7 @@ export class LoginPage implements OnInit {
       //this.hideLoading();
       console.log('auto login from session');
       //return this.router.navigate(["/tabs/services", form]);
-      this.navCtrl.navigateForward('/folder/Home');
+      this.navCtrl.navigateForward('/folder/Home/customer-returns');
     }
 
     return false;

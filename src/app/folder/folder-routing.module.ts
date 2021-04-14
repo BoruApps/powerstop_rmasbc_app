@@ -9,13 +9,14 @@ const routes: Routes = [
     component: FolderPage
   },
   {
-    path: 'core-returns',
-    loadChildren: () => import('./core-returns/core-returns.module').then( m => m.CoreReturnsPageModule)
-  },
-  {
     path: 'customer-returns',
     loadChildren: () => import('./customer-returns/customer-returns.module').then( m => m.CustomerReturnsPageModule)
+  },
+  {
+    path: 'create-rma',
+    loadChildren: () => import('./create-rma/create-rma.module').then( m => m.CreateRmaPageModule)
   }
+
 
 ];
 

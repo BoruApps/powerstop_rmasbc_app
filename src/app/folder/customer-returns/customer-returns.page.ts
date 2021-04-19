@@ -47,9 +47,7 @@ export class CustomerReturnsPage implements OnInit {
             Swal.fire(response.body.message);
           }else{
               //scan line item, show checklist
-            var recordid = data.record;
-            var seq_no = data.seq_no;
-            this.openModal(recordid, seq_no,[],0);
+            this.openModal(data,0);
           }
         }else{
           if(response.body.message == 'Item already full scanned.'){
@@ -85,7 +83,7 @@ export class CustomerReturnsPage implements OnInit {
       }, {
         text: 'Yes',
         handler: () => {
-          this.openModal(data.record, data.seq_no,data.ass_detail,1);
+          this.openModal(data,1);
         }
       }
     ]
@@ -102,15 +100,17 @@ export class CustomerReturnsPage implements OnInit {
     })
   }
 
-  async openModal(recordid, seq_no,data, is_update) {
+  async openModal(data, is_update) {
   const modal = await this.modalCtrl.create({
     component: ChecklistModalPage,
     cssClass: 'checklist-modal',
     componentProps: {
-      "recordid": recordid,
-      "seq_no": seq_no,
-      "ass_detail": data,
+      "recordid": data.record,
+      "seq_no": data.seq_no,
+      "ass_detail": data.ass_detail,
       "is_update": is_update,
+      "part_number": data.part_number,
+      "description": data.description,
     }
   });
 

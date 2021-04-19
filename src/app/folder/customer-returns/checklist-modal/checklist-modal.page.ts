@@ -19,6 +19,8 @@ export class ChecklistModalPage implements OnInit {
     seq_no : any;
     ass_detail : any;
     is_update : any;
+    part_number: any;
+    description: any;
     constructor(
         public apiRequestService: ApiRequestService,
         public modalCtrl: ModalController,
@@ -43,6 +45,8 @@ export class ChecklistModalPage implements OnInit {
         this.seq_no = this.navParams.data.seq_no;
         this.ass_detail = this.navParams.data.ass_detail;
         this.is_update = this.navParams.data.is_update;
+        this.part_number = this.navParams.data.part_number;
+        this.description = this.navParams.data.description;
         if(Object.keys(this.ass_detail).length > 0){
             if(this.ass_detail.cf_correct_part == 1){
                 this.isCorrectPartYes = true;

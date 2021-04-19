@@ -8,6 +8,8 @@ import { CreateRmaPageRoutingModule } from './create-rma-routing.module';
 
 import { CreateRmaPage } from './create-rma.page';
 
+import {ChecklistPage} from './checklist/checklist.page';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -15,6 +17,7 @@ import { CreateRmaPage } from './create-rma.page';
     IonicModule,
     CreateRmaPageRoutingModule,ReactiveFormsModule
   ],
-  declarations: [CreateRmaPage]
+  declarations: [CreateRmaPage,ChecklistPage],
+  entryComponents: [ChecklistPage]
 })
 export class CreateRmaPageModule {}

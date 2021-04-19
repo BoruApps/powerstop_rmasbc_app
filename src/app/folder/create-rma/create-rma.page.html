@@ -30,16 +30,24 @@
             <ion-label>Tracking Number</ion-label>
             <ion-input formControlName="trackingNumber"></ion-input>
           </ion-item>
-          <ion-item>
-            <ion-label >Part Number <span style="color: red">*</span> </ion-label>
-            <ion-input required="true" formControlName="partNumber"></ion-input>
-          </ion-item>
+
+          <div formArrayName="partNumbers">
+            <section [formGroupName]="i" *ngFor="let partNumberForm of partNumbers.controls; let i = index">
+              <div class="lesson-form-row" [formGroup]="partNumberForm">
+                <ion-item>
+                  <ion-label >Part Number #{{ i + 1 }} <span style="color: red">*</span></ion-label>
+                  <ion-input type="text" formControlName="partNumber"></ion-input>
+                  <ion-icon name="trash" *ngIf="i > 0" (click)="deleteRow(i)"></ion-icon>
+                </ion-item>
+              </div>
+            </section>
+          </div>
 
           <div class="button-grouping ion-padding">
-            <ion-router-link href="#" class="underline" style="color: blue;">Add another item</ion-router-link><br><br>
-            <!--<ion-button size="default"  color="secondary" type="button">
+            <ion-button size="default"  color="secondary" type="button" class = "button button-assertive button-clear add-row-rma" (click)="addNewRow()">
               <ion-text>Add another item</ion-text>
-            </ion-button>-->
+            </ion-button>
+            <br><br>
             <ion-button size="large" expand="block" color="primary" type="submit" [disabled]="!formGroup.valid">
               <ion-text>Save</ion-text>
             </ion-button>

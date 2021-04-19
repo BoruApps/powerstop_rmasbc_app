@@ -5,6 +5,16 @@
     </ion-toolbar>
 </ion-header>
 <ion-content>
+    <ion-grid>
+        <ion-row>
+            <ion-col size="4">Part Number</ion-col>
+            <ion-col size="8">Description</ion-col>
+        </ion-row>
+        <ion-row>
+            <ion-col size="4">{{part_number}}</ion-col>
+            <ion-col size="8">{{description}}</ion-col>
+        </ion-row>
+    </ion-grid>
     <form #form="ngForm" (ngSubmit)="SaveCheckList()">
         <ion-grid>
             <ion-row>
@@ -14,7 +24,7 @@
                 <ion-col size="3">Condition</ion-col>
             </ion-row>
             <ion-row>
-                <ion-col size="6">Was the correct part returns?</ion-col>
+                <ion-col size="6">Was the correct part returned?</ion-col>
                 <ion-col size="2">
                     <ion-checkbox  value="Yes"  (ionChange)="addUpdate($event)"  name="correct_part_yes" [checked]="isCorrectPartYes"></ion-checkbox>
                 </ion-col>

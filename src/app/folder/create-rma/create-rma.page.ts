@@ -77,6 +77,10 @@ export class CreateRmaPage implements OnInit {
       console.log(response);
       if (response.body.success){
         this.openModal(response.body.data);
+        let frmArray = form.get('partNumbers') as FormArray;
+        frmArray.clear();
+        form.reset();
+        this.addNewRow();
       }else{
         Swal.fire(response.body.message);
         this.apiRequestService.hideLoading();
@@ -103,7 +107,8 @@ export class CreateRmaPage implements OnInit {
       component: ChecklistPage,
       cssClass: 'checklist-modal',
       componentProps: {
-        "assets": data
+        "assets": data.assets,
+        "record": data.record,
       }
     });
 

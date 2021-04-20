@@ -11,6 +11,7 @@ import { Validators, FormBuilder, FormGroup, FormControl , FormArray} from "@ang
 })
 export class ChecklistPage implements OnInit {
     assets: any;
+    record: any;
     userdata: Object;
     formGroup: FormGroup;
     constructor(
@@ -20,6 +21,9 @@ export class ChecklistPage implements OnInit {
         private navParams: NavParams,
     ) {
         this.formGroup = this.formBuilder.group({
+            recordid: [
+                this.navParams.data.record,''
+            ],
             partNumbers     : this.formBuilder.array([])
         });
     }
@@ -32,7 +36,8 @@ export class ChecklistPage implements OnInit {
         const partNumberForm = this.formBuilder.group({
             correct_part: ['', Validators.required],
             actual_condition: ['', Validators.required],
-            inspected_condition: ['', Validators.required]
+            inspected_condition: ['', Validators.required],
+            assetid: [asset.assetsid, '']
         });
         this.partNumbers.push(partNumberForm);
     }
@@ -51,10 +56,10 @@ export class ChecklistPage implements OnInit {
     }
     loadData() {
         this.assets = this.navParams.data.assets;
-        this.assets.forEach((key, value) => {
-            console.log(value+':-:'+key);
-            this.addNewRow(value);
-        });
+        this.record = this.navParams.data.record;
+        for(let data of this.assets) {
+            this.addNewRow(data);
+        }
     }
 
     addUpdate(event) {
@@ -66,10 +71,8 @@ export class ChecklistPage implements OnInit {
 
     SaveCheckList(formData: any){
         console.log(formData);
-        console.log('Save checklist');
-        var params = {};
-        return;
-        this.apiRequestService.post(this.apiRequestService.ENDPOINT_SAVE_CHECKLIST, params).subscribe(response => {
+        //formData.push('recordid',this.record);
+        this.apiRequestService.post(this.apiRequestService.ENDPOINT_SAVE_MULTICHECKLIST, formData).subscribe(response => {
             console.log(response);
             Swal.fire(response.body.message);
             this.modalCtrl.dismiss();

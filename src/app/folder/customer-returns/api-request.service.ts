@@ -14,6 +14,7 @@ export class ApiRequestService {
     public ENDPOINT_LOGIN = 'postLogin.php';
     public ENDPOINT_CHECK_BARCODE= 'getRMAInfo.php';
     public ENDPOINT_SAVE_CHECKLIST= 'saveCheckList.php';
+    public ENDPOINT_SAVE_MULTICHECKLIST= 'saveMultiChecklist.php';
     public ENDPOINT_CREATERMA= 'createRMA.php';
     loading: any;
     constructor(

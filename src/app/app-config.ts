@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 
 export class AppConfig {
-    public apiurl = 'http://sbcrma.borugroup.com/barcodeappapi/';
-    public vturl = 'http://sbcrma.borugroup.com/rmssbc/';
+    public apiurl = 'https://sbcrma.borugroup.com/barcodeappapi/';
+    public vturl = 'https://sbcrma.borugroup.com/rmssbc/';
 }

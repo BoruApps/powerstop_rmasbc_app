@@ -16,6 +16,7 @@ export class ApiRequestService {
     public ENDPOINT_SAVE_CHECKLIST= 'saveCheckList.php';
     public ENDPOINT_SAVE_MULTICHECKLIST= 'saveMultiChecklist.php';
     public ENDPOINT_CREATERMA= 'createRMA.php';
+    public ENDPOINT_MISMATCH = 'rmaMismatch.php';
     loading: any;
     constructor(
         private httpClient: HttpClient,

@@ -55,7 +55,10 @@ export class CustomerReturnsPage implements OnInit {
             if(Object.keys(data.ass_detail).length > 0){
               this.showConfirm(data);
             }
-          }else {
+            // tslint:disable-next-line:triple-equals
+          } else if (response.body.code == 1){
+              this.showConfirmMismatch(barcode);
+          } else {
             Swal.fire(response.body.message);
           }
         }
@@ -140,4 +143,52 @@ export class CustomerReturnsPage implements OnInit {
     this.navCtrl.navigateForward('/folder/Home/create-rma');
   }
 
+  public async showConfirmMismatch(barcode: string): Promise<any> {
+      const self = this;
+      const alert =  await this.alertController.create({
+          cssClass: 'confirm',
+          header: 'Confirm!',
+          message: 'Doesn\'t match anything on the RMA, would you like to add this to the RMA as a mismatched item?',
+          buttons: [
+              {
+                  text: 'No',
+                  role: 'cancel',
+                  cssClass: 'secondary',
+                  handler: (blah) => {}
+              }, {
+                  text: 'Yes',
+                  handler: () => {
+                    self.showMismatchPopup(barcode);
+                  }
+              }
+          ]
+      });
+      return await alert.present();
+  }
+
+  public async showMismatchPopup(barcode: string): Promise<any>{
+      const self = this;
+      const {value: itemCode } = await Swal.fire({
+          title: 'Scan or Enter Product SKU#',
+          input: 'text',
+          inputPlaceholder: 'Enter Product SKU#',
+          inputLabel: 'Product SKU #'
+      });
+      if (itemCode) {
+          const params = {
+              rmaCode: barcode,
+              productCode: itemCode
+          };
+          self.apiRequestService.showLoading();
+          self.apiRequestService.post(this.apiRequestService.ENDPOINT_MISMATCH, params).subscribe(response => {
+              self.apiRequestService.hideLoading();
+              if (response.body.message){
+                  Swal.fire(response.body.message);
+              }
+          },  error => {
+              self.apiRequestService.hideLoading();
+              Swal.fire('Can not connect to Server.');
+          });
+      }
+  }
 }

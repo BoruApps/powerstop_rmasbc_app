@@ -27,8 +27,8 @@
             <ion-input formControlName="purchaseOrder"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label>Tracking Number</ion-label>
-            <ion-input formControlName="trackingNumber"></ion-input>
+            <ion-label>Tracking Number <span style="color: red">*</span></ion-label>
+            <ion-input required="true" formControlName="trackingNumber"></ion-input>
           </ion-item>
 
           <div formArrayName="partNumbers">

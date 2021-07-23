@@ -13,7 +13,7 @@ export class ChecklistModalPage implements OnInit {
     isCorrectPartNo: boolean=false;
     isActualConditionNo: boolean=false;
     isActualConditionYes: boolean=false;
-    inspectedCondition: any;
+    inspectedCondition: any ='';
     userdata: Object;
     recordid :any;
     seq_no : any;
@@ -124,7 +124,7 @@ export class ChecklistModalPage implements OnInit {
             Swal.fire('Please answer all questions.');
             return;
         }
-        else if(this.isActualConditionNo && this.inspectedCondition == ''){
+        else if(this.isActualConditionNo && (this.inspectedCondition == '' || this.inspectedCondition== 'undefined')){
             Swal.fire('Please select condition.');
             return;
         }else {

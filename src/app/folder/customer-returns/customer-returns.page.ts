@@ -44,7 +44,8 @@ export class CustomerReturnsPage implements OnInit {
         if (response.body.success){
           var data = response.body.data;
           if(data.scan_so == 1){
-            Swal.fire(response.body.message);
+            this.showConfirmMismatch(barcode, response.body.message);
+            //Swal.fire(response.body.message);
           }else{
               //scan line item, show checklist
             this.openModal(data,0);
@@ -57,7 +58,7 @@ export class CustomerReturnsPage implements OnInit {
             }
             // tslint:disable-next-line:triple-equals
           } else if (response.body.code == 1){
-              this.showConfirmMismatch(barcode);
+              this.showConfirmMismatch(barcode, response.body.message);
           } else {
             Swal.fire(response.body.message);
           }
@@ -143,7 +144,7 @@ export class CustomerReturnsPage implements OnInit {
     this.navCtrl.navigateForward('/folder/Home/create-rma');
   }
 
-  public async showConfirmMismatch(barcode: string): Promise<any> {
+  public async showConfirmMismatch(barcode: string, message: string): Promise<any> {
       const self = this;
       const alert =  await this.alertController.create({
           cssClass: 'confirm',
@@ -154,7 +155,9 @@ export class CustomerReturnsPage implements OnInit {
                   text: 'No',
                   role: 'cancel',
                   cssClass: 'secondary',
-                  handler: (blah) => {}
+                  handler: (blah) => {
+                    Swal.fire(message);
+                  }
               }, {
                   text: 'Yes',
                   handler: () => {

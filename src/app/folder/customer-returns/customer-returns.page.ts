@@ -44,7 +44,8 @@ export class CustomerReturnsPage implements OnInit {
         if (response.body.success){
           var data = response.body.data;
           if(data.scan_so == 1){
-            Swal.fire(response.body.message);
+            this.showConfirmMismatch(barcode, response.body.message);
+            //Swal.fire(response.body.message);
           }else{
               //scan line item, show checklist
             this.openModal(data,0);
@@ -57,7 +58,7 @@ export class CustomerReturnsPage implements OnInit {
             }
             // tslint:disable-next-line:triple-equals
           } else if (response.body.code == 1){
-              this.showConfirmMismatch(barcode);
+              this.showConfirmMismatch(barcode, response.body.message);
           } else {
             Swal.fire(response.body.message);
           }
@@ -143,7 +144,7 @@ export class CustomerReturnsPage implements OnInit {
     this.navCtrl.navigateForward('/folder/Home/create-rma');
   }
 
-  public async showConfirmMismatch(barcode: string): Promise<any> {
+  public async showConfirmMismatch(barcode: string, message: string): Promise<any> {
       const self = this;
       const alert =  await this.alertController.create({
           cssClass: 'confirm',
@@ -154,7 +155,9 @@ export class CustomerReturnsPage implements OnInit {
                   text: 'No',
                   role: 'cancel',
                   cssClass: 'secondary',
-                  handler: (blah) => {}
+                  handler: (blah) => {
+                    Swal.fire(message);
+                  }
               }, {
                   text: 'Yes',
                   handler: () => {
@@ -166,29 +169,57 @@ export class CustomerReturnsPage implements OnInit {
       return await alert.present();
   }
 
-  public async showMismatchPopup(barcode: string): Promise<any>{
-      const self = this;
-      const {value: itemCode } = await Swal.fire({
-          title: 'Scan or Enter Product SKU#',
-          input: 'text',
-          inputPlaceholder: 'Enter Product SKU#',
-          inputLabel: 'Product SKU #'
-      });
-      if (itemCode) {
-          const params = {
-              rmaCode: barcode,
-              productCode: itemCode
-          };
-          self.apiRequestService.showLoading();
-          self.apiRequestService.post(this.apiRequestService.ENDPOINT_MISMATCH, params).subscribe(response => {
-              self.apiRequestService.hideLoading();
-              if (response.body.message){
-                  Swal.fire(response.body.message);
-              }
-          },  error => {
-              self.apiRequestService.hideLoading();
-              Swal.fire('Can not connect to Server.');
-          });
-      }
-  }
+    public async showMismatchPopup(barcode: string): Promise<any>{
+        const self = this;
+
+        const { value: formValues } = await Swal.fire({
+            title: 'Multiple inputs',
+            html:
+                '<label for="swal2-input" class="swal2-input-label">Product SKU #</label>\
+                  <input class="swal2-input" id="swal1-input-txt" placeholder="Enter Product SKU#" type="text" style="display: flex;color: #000000 !important;">\
+                  <label for="swal2-input" class="swal2-input-label">Condition</label>\
+                  <select class="swal2-select" id="swal2-input-select" style="display: flex;border: 1px solid #ccc !important;width: 100%;">\
+                      <option value="Good">Good</option>\
+                      <option value="Defective">Defective</option>\
+                  </select>\
+            ',
+            focusConfirm: false,
+            preConfirm: () => {
+                const swalInput1 = document.getElementById('swal1-input-txt');
+                const swalInput2 = document.getElementById('swal2-input-select');
+                let swalInput1Value = '';
+                let swalInput2Value = '';
+                if (swalInput1){
+                    swalInput1Value = swalInput1['value'];
+                }
+                if (swalInput2){
+                    swalInput2Value = swalInput2['value'];
+                }
+                return [
+                    swalInput1Value,
+                    swalInput2Value
+                ];
+            }
+        });
+
+        if (formValues) {
+            const itemCode = formValues[0];
+            if (itemCode !== undefined && itemCode){
+                const params = {
+                    rmaCode: barcode,
+                    productCode: itemCode
+                };
+                self.apiRequestService.showLoading();
+                self.apiRequestService.post(this.apiRequestService.ENDPOINT_MISMATCH, params).subscribe(response => {
+                    self.apiRequestService.hideLoading();
+                    if (response.body.message){
+                        Swal.fire(response.body.message);
+                    }
+                },  error => {
+                    self.apiRequestService.hideLoading();
+                    Swal.fire('Can not connect to Server.');
+                });
+            }
+        }
+    }
 }

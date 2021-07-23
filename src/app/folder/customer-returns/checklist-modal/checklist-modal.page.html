@@ -35,10 +35,10 @@
             </ion-row>
             <ion-row>
                 <ion-col size="6">Does the actual condition of the part match the customer's description?</ion-col>
-                <ion-col size="2">
+                <ion-col size="2" style="margin-top:10px;">
                     <ion-checkbox  value="Yes" (ionChange)="addUpdate($event)"  name="actual_condition_yes" [checked]="isActualConditionYes" ></ion-checkbox>
                 </ion-col>
-                <ion-col size="1">
+                <ion-col size="1" style="margin-top:10px;">
                     <ion-checkbox  value="No" (ionChange)="addUpdate($event)"  name="actual_condition_no" [checked]="isActualConditionNo" ></ion-checkbox>
                 </ion-col>
                 <ion-col size="3">

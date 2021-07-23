@@ -72,6 +72,9 @@ export class ChecklistModalPage implements OnInit {
             if(is_checked) {
                 this.isActualConditionNo = true;
                 this.isActualConditionYes = false;
+                if(this.inspectedCondition  == ''){
+                    this.inspectedCondition  = 'Chipped';
+                }
             }else{
                 this.isActualConditionNo = false;
             }
@@ -115,23 +118,34 @@ export class ChecklistModalPage implements OnInit {
 
     SaveCheckList(){
         console.log('Save checklist');
-        var params = {
-            recordid: this.recordid,
-            seq_no: this.seq_no,
-            isCorrectPartNo: this.isCorrectPartNo,
-            isCorrectPartYes: this.isCorrectPartYes,
-            inspectedCondition: this.inspectedCondition,
-            isActualConditionYes: this.isActualConditionYes,
-            isActualConditionNo: this.isActualConditionNo,
-            is_update: this.is_update,
+        console.log(this.inspectedCondition == '');
+        console.log(this.isActualConditionNo);
+        if((!this.isCorrectPartNo && !this.isCorrectPartYes) || (!this.isActualConditionYes && !this.isActualConditionNo) ){
+            Swal.fire('Please answer all questions.');
+            return;
         }
-        this.apiRequestService.post(this.apiRequestService.ENDPOINT_SAVE_CHECKLIST, params).subscribe(response => {
-            console.log(response);
-            Swal.fire(response.body.message);
-            this.modalCtrl.dismiss();
-        },  error => {
-            Swal.fire('Can not connect to Server.');
-        });
+        else if(this.isActualConditionNo && this.inspectedCondition == ''){
+            Swal.fire('Please select condition.');
+            return;
+        }else {
+            var params = {
+                recordid: this.recordid,
+                seq_no: this.seq_no,
+                isCorrectPartNo: this.isCorrectPartNo,
+                isCorrectPartYes: this.isCorrectPartYes,
+                inspectedCondition: this.inspectedCondition,
+                isActualConditionYes: this.isActualConditionYes,
+                isActualConditionNo: this.isActualConditionNo,
+                is_update: this.is_update,
+            }
+            this.apiRequestService.post(this.apiRequestService.ENDPOINT_SAVE_CHECKLIST, params).subscribe(response => {
+                console.log(response);
+                Swal.fire(response.body.message);
+                this.modalCtrl.dismiss();
+            }, error => {
+                Swal.fire('Can not connect to Server.');
+            });
+        }
     }
     closeModal() {
         this.modalCtrl.dismiss();

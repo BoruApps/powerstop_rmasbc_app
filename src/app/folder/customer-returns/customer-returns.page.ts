@@ -199,15 +199,29 @@ export class CustomerReturnsPage implements OnInit {
                     swalInput1Value,
                     swalInput2Value
                 ];
+            },
+            onOpen: () => {
+                const confirmButton = Swal.getConfirmButton();
+                confirmButton.disabled = true;
+                const selectElement = document.getElementById('swal2-input-select');
+                selectElement.addEventListener('click', () => {
+                    if (selectElement['value'] !== ''){
+                        confirmButton.disabled = false;
+                    } else {
+                        confirmButton.disabled = true;
+                    }
+                });
             }
         });
 
         if (formValues) {
             const itemCode = formValues[0];
             if (itemCode !== undefined && itemCode){
+                const condition = formValues[1];
                 const params = {
                     rmaCode: barcode,
-                    productCode: itemCode
+                    productCode: itemCode,
+                    mismatchCondition: condition
                 };
                 self.apiRequestService.showLoading();
                 self.apiRequestService.post(this.apiRequestService.ENDPOINT_MISMATCH, params).subscribe(response => {

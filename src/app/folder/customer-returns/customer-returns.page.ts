@@ -179,6 +179,7 @@ export class CustomerReturnsPage implements OnInit {
                   <input class="swal2-input" id="swal1-input-txt" placeholder="Enter Product SKU#" type="text" style="display: flex;color: #000000 !important;">\
                   <label for="swal2-input" class="swal2-input-label">Condition</label>\
                   <select class="swal2-select" id="swal2-input-select" style="display: flex;border: 1px solid #ccc !important;width: 100%;">\
+                      <option value=""></option>\
                       <option value="Good">Good</option>\
                       <option value="Defective">Defective</option>\
                   </select>\
